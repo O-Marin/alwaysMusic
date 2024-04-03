@@ -4,7 +4,7 @@ const argumentos = process.argv.slice(2);
 //nombre,
 const opcion = argumentos[0];
 const nombre = argumentos[1];
-const rut = argumentos[2];
+let rut = argumentos[2];
 const curso = argumentos[3];
 const nivel = argumentos[4];
 
@@ -46,6 +46,15 @@ const deleteMusico = async (rut) => {
     console.log(`Musico Eliminado con rut: ${rut} eliminado`)
 }
 
+const getByRut = async (rut) => {
+    const sql = 'select nombre,rut,curso,nivel from musicos where rut = $1'
+    const values = [rut];
+
+    const response = await pool.query(sql,values);
+    console.log(`Mostrando musico con rut: ${rut} `)
+    console.log(response.rows)
+}
+
 switch (opcion){
     case 'add':
         agregarMusico(nombre,rut,curso,nivel);
@@ -57,10 +66,12 @@ switch (opcion){
         mostrarMusicos();
         break;
     case 'delete':
+        rut = argumentos[1]
         deleteMusico(rut);
         break;
     case 'getRut':
-        getByRute(rut);
+        rut = argumentos[1]
+        getByRut(rut);
         break;
 }
 
